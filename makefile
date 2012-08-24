@@ -46,7 +46,8 @@ non_redundant_compile : $(rm_duplicacy)
 non_duplicate_main.o : non_duplicate_main.cpp sort-rollno.out
 	$(CC) $(CFLAGS) non_duplicate_main.cpp
 
-
+clean :
+	rm -f *.out expand_compile sort_compile non_redundant_compile
 
 
 
