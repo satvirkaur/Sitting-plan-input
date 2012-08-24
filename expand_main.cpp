@@ -1,4 +1,5 @@
 #include "input.h"
+
 //#include"input.cpp"
 int main()
 {

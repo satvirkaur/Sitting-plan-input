@@ -41,7 +41,7 @@ public:
 	void expand_rollno();
 	void rooms_detail();
 	void sort_rollno();
-	void remove_rollno();
+	void rm_duplicate_rollno();
 	template<typename OutIter>
 	bool parse_number_list_with_ranges(istream& is, OutIter out);
 	void roll_no_processing();

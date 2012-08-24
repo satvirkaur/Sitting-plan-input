@@ -19,12 +19,13 @@ void input :: rollno_details()	// get roll no details
 	}
 }
 
+
 void input ::  input_in_details()	// read input(input.in) file
 {
-	cout<<"\n\t Enter input file name: ";
-	cin>>input_file;
+	//cout<<"\n\t Enter input file name: ";
+	//cin>>input_file;
 	//input_file = "input.in";
-	infile.open(input_file);//"input.in");//, ios::in, ios::out);
+	infile.open("input.in");//"input.in");//, ios::in, ios::out);
 	room_details();
 	rollno_details();
 	infile.close();
@@ -45,7 +46,7 @@ void input :: expand(string rno)	// process input.in file and
 		outfile << v.back()<<endl;
 	}
 	else
-	outfile << "an error occured.\n";
+	outfile << "An error occured.\n";
 	
 }
 
@@ -53,7 +54,7 @@ void input :: expand(string rno)	// process input.in file and
 // Writing expanded form of roll nos in file
 void input :: expand_rollno()
 {	
-	outfile.open("input_expand.out");
+	outfile.open("expand-rollno.out");
 	outfile << t_branches <<endl;
 	for(i=0; i<t_branches; i++)
 	{
@@ -65,13 +66,20 @@ void input :: expand_rollno()
 //putting all the rooms detail into a file
 void input :: rooms_detail()
 {
-	outfile.open("rooms_detail.out");//, ios::out, ios::in, ios::app);
-	cout<<"hello";
+	outfile.open("input-rooms.out");//, ios::out, ios::in, ios::app);
+	//cout<<"input-rooms.out";
+	//rooms details
 	outfile<<t_rooms<<endl;
 	for(i=0; i<t_rooms; i++)
 	{
 		outfile<<room_no[i]<<" "<<rows[i]<<" "<<cols[i]<<endl;
 	}
+	outfile << t_branches << endl;	// writing branches to the file
+	for(i=0;i<t_branches;i++)
+	{
+		outfile << branch_name[i] <<" " << exam_subject[i] << endl;
+	}
+	//branches and sujects of exam
 	outfile.close();
 }
 
@@ -80,7 +88,8 @@ void input :: rooms_detail()
 void input :: sort_rollno()
 {
 	// Reading roll nos from file
-	infile.open("input_expand.out");
+	infile.open("expand-rollno.out");
+	//cout<<"expand-rollno.out";
 	infile >> t_branches;
 	for(i=0; i<t_branches; i++)
 	{
@@ -101,27 +110,14 @@ void input :: sort_rollno()
 		}
 		
 		sort(rno, rno+roll_size[i]);	// Sort function
-		
-		for(j=0; j<roll_size[i]; j++)
-		{	// Removing duplicate values
-			if(rno[j]==rno[j+1])// || rno[j+1]==rno[j+2])
-			{
-				for(k=j; k<=roll_size[i]; k++) 
-     		 	{
-          			rno[k] = rno[k+1];  //shifts each element one position above
-     			}
-     			roll_size[i]--;
-     			j=0;
-			}
-		}
-		
+				
 		for(j=0; j<roll_size[i]; j++)
 		{
 			roll_no[i][j] = rno[j];
 		}
 	}		
 		// Writing into file(input_sorted.out)
-	outfile.open("input_sorted.out");
+	outfile.open("sort-rollno.out");
 	outfile << t_branches <<endl;
 	for(int i=0; i<t_branches; i++)
 	{
@@ -136,10 +132,10 @@ void input :: sort_rollno()
 }
 
 
-void input :: remove_rollno()
+void input :: rm_duplicate_rollno()
 {
 	// Reading roll nos from file
-	infile.open("input_sorted.out");
+	infile.open("sort-rollno.out");
 	infile >> t_branches;
 	for(i=0; i<t_branches; i++)
 	{
@@ -149,14 +145,26 @@ void input :: remove_rollno()
 			infile >> roll_no[i][j];
 		}
 	}
-	
 	infile.close();
-	// Sorting of roll nos.
+	
 	for(i=0;i<t_branches;i++)
 	{
 		for(j=0; j<roll_size[i]; j++)
 		{
 			rno[j] = roll_no[i][j];
+		}
+		
+		for(j=0; j<roll_size[i]; j++)
+		{	// Removing duplicate values
+			if(rno[j]==rno[j+1])// || rno[j+1]==rno[j+2])
+			{
+				for(k=j; k<=roll_size[i]; k++) 
+     		 	{
+          			rno[k] = rno[k+1];  //shifts each element one position above
+     			}
+     			roll_size[i]--;
+     			j=0;
+			}
 		}
 		
 		// Removing roll nos that are not for exam
@@ -178,8 +186,7 @@ void input :: remove_rollno()
     		      			rno[l] = rno[l+1];  //shifts each element one position above
     		 			}
     		 			roll_size[i]--;
-    		 			//k=0;
-					}
+    		 		}
 				}
 				j--;
 			}
@@ -190,7 +197,7 @@ void input :: remove_rollno()
 		}
 	}
 	// Writing into file
-	outfile.open("input_processed.out");
+	outfile.open("non-redundant-rollno.out");
 	outfile << t_branches <<endl;
 	for(int i=0; i<t_branches; i++)
 	{
